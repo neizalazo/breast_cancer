@@ -23,15 +23,17 @@ fluidPage(
       mainPanel(
         fluidRow(
           column(4,
-            selectizeInput(inputId = 'Characteristic',
-                           label = 'Characteristic',
-                           choices = colnames(data)),
-            
-            sliderInput("size",
-                        "size in mm:",
+            selectizeInput(inputId = 'Parameter',
+                           label = 'Parameter',
+                           choices = colnames(data)[-1]),
+            #uiOutput('slider')
+            sliderInput(inputId = 'bins',
+                        label = 'No. of bins',
+                        value = 20,
                         min = 1,
-                        max = 10,
-                        value = c(3,7))
+                        max = 50
+                        )
+            
           ),
           column(7,
             plotOutput('dist')

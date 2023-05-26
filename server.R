@@ -10,18 +10,21 @@
 
 
 # plot distribution
-function(input, output) {
+function(input, output, session) {
+  
   output$dist  <-  renderPlot(
-       data %>% filter((.data[[input$Characteristic]] >= input$size[1])
-                       &(.data[[input$Characteristic]] <= input$size[2])) %>%
-                ggplot(aes_string(x = input$Characteristic)) +
-                geom_bar() +  
-                ggtitle(paste(input$Characteristic, 'Distribution')) +
-                xlab(paste(input$Characteristic, '(mm)')) +
-                ylab('Sample count') +
+       data %>% ggplot(aes_string(x = input$Parameter)) +
+                geom_histogram(bins = input$bins) +  
+                ggtitle(paste(input$Parameter, 'Distribution')) +
+                xlab(paste(input$Parameter, 'size (mm)')) +
+                ylab('Frequency') +
                 theme(plot.title = element_text(hjust = 0.5, size = 20),
                       axis.title = element_text(size = 15))
   )
-  }
+  
+  observe(updateSliderInput(session, 'bins', max=length(unique(data[[input$Parameter]]))))
+}
+  
+
 
 
