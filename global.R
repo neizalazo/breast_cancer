@@ -7,6 +7,7 @@ library(ggcorrplot)
 library(ggforce)
 library(GGally)
 library(shinycssloaders)
+library(DT)
 
 #load data set: https://www.kaggle.com/datasets/uciml/breast-cancer-wisconsin-data?select=data.csv&page=3
 data = read.csv("data.csv") 

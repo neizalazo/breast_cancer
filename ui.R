@@ -33,7 +33,7 @@ dashboardPage(
           tabBox(
             title = "Exploratory Analysis",
             # The id lets us use input$tabset1 on the server to find the current tab
-            id = "tabset1", height = "1000px", width = "400px",
+            id = "tabset1", height = "1000px", width = "1000px",
             tabPanel("Distribution", 
                 fluidRow( #SELECT parameter for distribution tab
                     column(4,
@@ -77,26 +77,23 @@ dashboardPage(
             ),#tabPanel("Scatter Plots",  
             
             tabPanel("Correlation Matrix",
-               plotOutput('Correlation', height = "1500px", width = "1500px") %>%
+               plotOutput('Correlation', height = "1000px") %>%
                  withSpinner(color="#0dc5c1")
             )#tabPanel("Correlation Matrix",
  
           )# tabBox
       ),# tabItem(tabName = 'Exploratory'
    
-
-      
-      # -----
-      #   
-      #     box(width = 12,solidHeader = TRUE, (div(style='width:1400px;overflow-x: scroll;height:800px;overflow-y: scroll;',
-      #                                             plotOutput("plot4",height = 1200, width = 2000)))
-      #   -----
-      
-      
-      
       
       tabItem(tabName = 'Modeling',
-              fluidRow()),
+          tabBox(
+            title = "Modeling",
+            # The id lets us use input$tabset1 on the server to find the current tab
+            id = "tabset2", height = "1000px", width = "1000px",
+            tabPanel("Regression Output", 
+                     verbatimTextOutput('logistic_sum')),
+            tabPanel("Probability Plot", 
+                     plotOutput('prob_log')))),
 
       
       tabItem(tabName = 'About',

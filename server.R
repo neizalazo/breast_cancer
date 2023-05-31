@@ -68,7 +68,15 @@ function(input, output, session) {
             mapping = aes(color = diagnosis, alpha =0.5)) +
     theme(strip.text.x = element_text(size = 12),
           strip.text.y = element_text(size = 12)))
-
+  
+  #Plot prob_log  
+  output$logistic_sum  <- renderPrint(
+    logistic_sum) 
+  
+  #Plot prob_log  
+  output$prob_log  <- renderPlot(
+            prob_log)
+  
 }
   
 
