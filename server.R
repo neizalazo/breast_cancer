@@ -56,11 +56,10 @@ function(input, output, session) {
     if (input$line) {scatt()+geom_smooth(method=lm)} else {scatt()}
   ) #output$scatt
 
-  #Plot CORRELATION Matrix  
+  #### Plot CORRELATION Matrix  
   output$Correlation  <- renderPlot(
     ggpairs(data, columns = 2:ncol(data), 
             title = "Bivariate analysis Breast Cancer Outcome",
-            #upper = list(continuous = wrap("cor", size=5)),
             upper = list(continuous = wrap(my_fn, size=5)),
             lower = list(continuous = wrap("smooth",
                                            alpha = 0.3,
@@ -68,14 +67,42 @@ function(input, output, session) {
             mapping = aes(color = diagnosis, alpha =0.5)) +
     theme(strip.text.x = element_text(size = 12),
           strip.text.y = element_text(size = 12)))
+
+  #### Logistic regression
+  store_logistic  <- reactiveVal(NULL)
   
-  #Plot prob_log  
+  logistic_sum <- observeEvent(input$var1, {
+    dep_var = paste(input$var1, collapse='+')
+    new_data = paste0('diagnosis~',dep_var)
+    logistic = glm(as.formula(new_data), data, family='binomial')
+    store_logistic(logistic)
+  })  
+  
+  logistic_sum <- eventReactive(input$var1, {
+    summary(store_logistic())
+    })
+                           
   output$logistic_sum  <- renderPrint(
-    logistic_sum) 
+    logistic_sum())
   
-  #Plot prob_log  
+  #### Plot prob_log  
+  prob_log <- eventReactive(input$var1, { 
+    newa <- store_logistic()
+
+    predicted_data <- data.frame(
+          prob_of_cancer = newa$fitted.values, diagnosis=data$diagnosis)
+    predicted_data <- predicted_data[order(predicted_data$prob_of_cancer, decreasing=FALSE),]
+
+    predicted_data$rank = 1:nrow(predicted_data)
+
+    ggplot(data=predicted_data, aes(x=rank, y=prob_of_cancer)) +
+      geom_point(aes(color=diagnosis), alpha=1, shape=5, stroke=2) +
+      xlab('Index') +
+      ylab('Predicted probability of Cancer')
+  })
+  
   output$prob_log  <- renderPlot(
-            prob_log)
+    prob_log())
   
 }
   

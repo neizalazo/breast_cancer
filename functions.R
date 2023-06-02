@@ -20,22 +20,4 @@ my_fn <- function(data, mapping, method="p", use="pairwise", ...){
 }
 
 
-#LOGISTIC REGRESSION 
-library(ggplot2)
-library(cowplot)
-#logistic <- glm(diagnosis~perimeter_mean, data, family='binomial')
-logistic <- glm(diagnosis~., data, family='binomial')
-logistic_sum <- summary(logistic)
-
-predicted_data <- data.frame(
-  prob_of_cancer = logistic$fitted.values, diagnosis=data$diagnosis)
-predicted_data <- predicted_data[order(predicted_data$prob_of_cancer, decreasing=FALSE),]
-
-predicted_data$rank = 1:nrow(predicted_data)
-
-prob_log <- ggplot(data=predicted_data, aes(x=rank, y=prob_of_cancer)) +
-  geom_point(aes(color=diagnosis), alpha=1, shape=5, stroke=2) +
-  xlab('Index') +
-  ylab('Predicted probability of Cancer')
-
 
